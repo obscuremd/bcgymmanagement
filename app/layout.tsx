@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { ThemeProvider } from "@/components/theme-provider";
+import Aurora from "@/components/Aurora";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,9 +27,26 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased relative text-white`}
       >
-        {children}
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <div className="relative flex flex-col">
+            <div className="z-10">{children}</div>
+            <div className="fixed w-screen right-0 z-0 h-[50vh]">
+              <Aurora
+                colorStops={["#B8962E", "#D4AF37", "#E6C76A"]}
+                blend={0.9}
+                amplitude={1}
+                speed={0.5}
+              />
+            </div>
+          </div>
+        </ThemeProvider>
       </body>
     </html>
   );
