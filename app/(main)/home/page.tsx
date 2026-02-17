@@ -346,7 +346,7 @@ export default function Page() {
   return (
     <div className="min-h-screen space-y-6 w-full">
       {/* Header */}
-      <div className="flex items-center justify-between ">
+      <div className="flex flex-col md:flex-row gap-5 items-center justify-between ">
         <div className="flex items-center gap-4">
           <div className="p-1 bg-gradient-to-br from-[#d4af37]/20 to-[#e6c76a]/20 rounded-full border border-[#d4af37]/30">
             <Logo />
@@ -354,7 +354,7 @@ export default function Page() {
 
           <div>
             <p className="text-xl font-semibold text-white">
-              BC Gym Management
+              BC Gym Management``
             </p>
             <div className="h-[2px] w-40 bg-gradient-to-r from-[#d4af37] via-[#e6c76a] to-transparent mt-1.5" />
             <p className="text-sm text-neutral-400 mt-1">
@@ -879,7 +879,7 @@ export default function Page() {
                     </div>
                     <div>
                       <p className="text-xs text-zinc-500">Email</p>
-                      <p className="text-sm text-white mt-1">
+                      <p className="text-sm text-white mt-1 truncate">
                         {selectedMember.email}
                       </p>
                     </div>
@@ -891,7 +891,7 @@ export default function Page() {
                     </div>
                     <div>
                       <p className="text-xs text-zinc-500">Address</p>
-                      <p className="text-sm text-white mt-1">
+                      <p className="text-sm text-white mt-1 truncate ">
                         {selectedMember.address}
                       </p>
                     </div>
