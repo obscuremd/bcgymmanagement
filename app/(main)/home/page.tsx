@@ -9,7 +9,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import {
-  Home,
   Search,
   Filter,
   Plus,
@@ -18,27 +17,9 @@ import {
   CreditCard,
   User,
   Mail,
-  Phone,
-  MapPin,
-  Clock,
   DollarSign,
 } from "lucide-react";
 import Image from "next/image";
-import {
-  Item,
-  ItemContent,
-  ItemDescription,
-  ItemGroup,
-  ItemMedia,
-  ItemTitle,
-} from "@/components/ui/item";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
-import VehicleTable from "@/components/localComponents/FileTable";
 import Logo from "@/components/localComponents/Logo";
 import { Button } from "@/components/ui/button";
 import {
@@ -52,6 +33,12 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useState } from "react";
+import { MemberCard } from "@/components/localComponents/MemberCard";
+import {
+  InfoSection,
+  InfoField,
+} from "@/components/localComponents/InfoSection";
+import { DurationInput } from "@/components/localComponents/DurationInput";
 
 interface Member {
   id: number;
@@ -69,6 +56,8 @@ interface Member {
   cardIssueDate: string;
   regCardType: string;
   paymentMethod: string;
+  paymentDate: string;
+  paymentByInstallment: string;
   expiryDate: string;
   status: "Active" | "Expired";
 }
@@ -82,6 +71,7 @@ export default function Page() {
   const [filterMembership, setFilterMembership] = useState<string>("all");
   const [filterStatus, setFilterStatus] = useState<string>("all");
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const [durationValue, setDurationValue] = useState<string>("");
   const itemsPerPage = 8;
 
   const members: Member[] = [
@@ -97,11 +87,13 @@ export default function Page() {
       membershipType: "VIP MEMBERSHIP",
       registrationDate: "2024-01-15",
       cardReceivedDate: "2024-01-20",
-      duration: "12 Months",
-      amount: "₦250,000",
+      duration: "1 YEAR",
+      amount: "$250,000",
       cardIssueDate: "2024-01-20",
       regCardType: "Gold Card",
-      paymentMethod: "Bank Transfer",
+      paymentMethod: "Instant Bank Transfer",
+      paymentDate: "2024-01-15",
+      paymentByInstallment: "No",
       expiryDate: "2025-01-15",
       status: "Active",
     },
@@ -117,11 +109,13 @@ export default function Page() {
       membershipType: "REGULAR MEMBERSHIP",
       registrationDate: "2024-02-01",
       cardReceivedDate: "2024-02-05",
-      duration: "6 Months",
-      amount: "₦120,000",
+      duration: "6 MONTHS",
+      amount: "$120,000",
       cardIssueDate: "2024-02-05",
       regCardType: "Standard Card",
       paymentMethod: "Cash",
+      paymentDate: "2024-02-01",
+      paymentByInstallment: "No",
       expiryDate: "2024-08-01",
       status: "Active",
     },
@@ -134,14 +128,16 @@ export default function Page() {
       address: "8 Glover Road, Ikoyi, Lagos",
       image:
         "https://plus.unsplash.com/premium_photo-1671656349322-41de944d259b?w=600",
-      membershipType: "PERSONAL TRAINING REGISTERING",
+      membershipType: "PERSONAL TRAINING REGISTRATION",
       registrationDate: "2023-11-10",
       cardReceivedDate: "2023-11-15",
-      duration: "3 Months",
-      amount: "₦180,000",
+      duration: "20 ENTRIES A MONTH",
+      amount: "$180,000",
       cardIssueDate: "2023-11-15",
       regCardType: "Platinum Card",
-      paymentMethod: "POS",
+      paymentMethod: "POS Debit",
+      paymentDate: "2023-11-10",
+      paymentByInstallment: "No",
       expiryDate: "2024-02-10",
       status: "Expired",
     },
@@ -157,11 +153,13 @@ export default function Page() {
       membershipType: "ZUMBA MEMBERSHIP",
       registrationDate: "2024-01-20",
       cardReceivedDate: "2024-01-22",
-      duration: "6 Months",
-      amount: "₦95,000",
+      duration: "6 MONTHS",
+      amount: "$95,000",
       cardIssueDate: "2024-01-22",
       regCardType: "Standard Card",
-      paymentMethod: "Bank Transfer",
+      paymentMethod: "Instant Bank Transfer",
+      paymentDate: "2024-01-20",
+      paymentByInstallment: "No",
       expiryDate: "2024-07-20",
       status: "Active",
     },
@@ -177,11 +175,13 @@ export default function Page() {
       membershipType: "BOXING MEMBERSHIP",
       registrationDate: "2024-02-10",
       cardReceivedDate: "2024-02-12",
-      duration: "12 Months",
-      amount: "₦200,000",
+      duration: "1 YEAR",
+      amount: "$200,000",
       cardIssueDate: "2024-02-12",
       regCardType: "Gold Card",
-      paymentMethod: "Card",
+      paymentMethod: "Installment Monthly Bank Debit",
+      paymentDate: "2024-02-10",
+      paymentByInstallment: "Yes - 12 months",
       expiryDate: "2025-02-10",
       status: "Active",
     },
@@ -197,11 +197,13 @@ export default function Page() {
       membershipType: "GROUP MEMBERSHIP",
       registrationDate: "2024-01-05",
       cardReceivedDate: "2024-01-08",
-      duration: "12 Months",
-      amount: "₦150,000",
+      duration: "1 YEAR",
+      amount: "$150,000",
       cardIssueDate: "2024-01-08",
       regCardType: "Standard Card",
-      paymentMethod: "Bank Transfer",
+      paymentMethod: "Payment on Website",
+      paymentDate: "2024-01-05",
+      paymentByInstallment: "No",
       expiryDate: "2025-01-05",
       status: "Active",
     },
@@ -214,14 +216,16 @@ export default function Page() {
       address: "34 Bourdillon Road, Ikoyi, Lagos",
       image:
         "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=600",
-      membershipType: "ONLINE REGISTERING",
+      membershipType: "ONLINE REGISTRATION",
       registrationDate: "2024-02-15",
       cardReceivedDate: "2024-02-16",
-      duration: "3 Months",
-      amount: "₦75,000",
+      duration: "3 MONTHS",
+      amount: "$75,000",
       cardIssueDate: "2024-02-16",
       regCardType: "Digital Card",
-      paymentMethod: "Online Payment",
+      paymentMethod: "Crypto Payment",
+      paymentDate: "2024-02-15",
+      paymentByInstallment: "No",
       expiryDate: "2024-05-15",
       status: "Active",
     },
@@ -236,11 +240,13 @@ export default function Page() {
       membershipType: "VIP MEMBERSHIP",
       registrationDate: "2023-12-01",
       cardReceivedDate: "2023-12-05",
-      duration: "12 Months",
-      amount: "₦250,000",
+      duration: "1 YEAR",
+      amount: "$250,000",
       cardIssueDate: "2023-12-05",
       regCardType: "Platinum Card",
-      paymentMethod: "Bank Transfer",
+      paymentMethod: "USD Payment",
+      paymentDate: "2023-12-01",
+      paymentByInstallment: "No",
       expiryDate: "2024-12-01",
       status: "Active",
     },
@@ -256,11 +262,13 @@ export default function Page() {
       membershipType: "KIDS REGISTRATION",
       registrationDate: "2024-01-25",
       cardReceivedDate: "2024-01-27",
-      duration: "6 Months",
-      amount: "₦85,000",
+      duration: "6 MONTHS",
+      amount: "$85,000",
       cardIssueDate: "2024-01-27",
       regCardType: "Junior Card",
       paymentMethod: "Cash",
+      paymentDate: "2024-01-25",
+      paymentByInstallment: "No",
       expiryDate: "2024-07-25",
       status: "Active",
     },
@@ -276,17 +284,18 @@ export default function Page() {
       membershipType: "SEASON PERSONAL TRAINING",
       registrationDate: "2024-02-05",
       cardReceivedDate: "2024-02-08",
-      duration: "3 Months",
-      amount: "₦165,000",
+      duration: "40 ENTRIES IN 2 MONTHS",
+      amount: "$165,000",
       cardIssueDate: "2024-02-08",
       regCardType: "Gold Card",
-      paymentMethod: "POS",
+      paymentMethod: "POS Debit",
+      paymentDate: "2024-02-05",
+      paymentByInstallment: "No",
       expiryDate: "2024-05-05",
       status: "Active",
     },
   ];
 
-  // Filter and search logic
   const filteredMembers = members.filter((member) => {
     const matchesSearch =
       member.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -302,7 +311,6 @@ export default function Page() {
     return matchesSearch && matchesMembership && matchesStatus;
   });
 
-  // Pagination logic
   const totalPages = Math.ceil(filteredMembers.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const paginatedMembers = filteredMembers.slice(
@@ -319,9 +327,9 @@ export default function Page() {
     "REGULAR MEMBERSHIP",
     "VIP MEMBERSHIP",
     "GROUP MEMBERSHIP",
-    "PERSONAL TRAINING REGISTERING",
+    "PERSONAL TRAINING REGISTRATION",
     "SEASON PERSONAL TRAINING",
-    "ONLINE REGISTERING",
+    "ONLINE REGISTRATION",
     "ZUMBA MEMBERSHIP",
     "BOXING MEMBERSHIP",
     "KIDS REGISTRATION",
@@ -329,10 +337,12 @@ export default function Page() {
 
   const paymentMethods: string[] = [
     "Cash",
-    "Bank Transfer",
-    "POS",
-    "Card",
-    "Online Payment",
+    "Instant Bank Transfer",
+    "POS Debit",
+    "Installment Monthly Bank Debit",
+    "Payment on Website",
+    "Crypto Payment",
+    "USD Payment",
   ];
 
   const cardTypes: string[] = [
@@ -346,7 +356,7 @@ export default function Page() {
   return (
     <div className="min-h-screen space-y-6 w-full">
       {/* Header */}
-      <div className="flex flex-col md:flex-row gap-5 items-center justify-between ">
+      <div className="flex flex-col md:flex-row gap-5 items-center justify-between">
         <div className="flex items-center gap-4">
           <div className="p-1 bg-gradient-to-br from-[#d4af37]/20 to-[#e6c76a]/20 rounded-full border border-[#d4af37]/30">
             <Logo />
@@ -354,7 +364,7 @@ export default function Page() {
 
           <div>
             <p className="text-xl font-semibold text-white">
-              BC Gym Management``
+              BC Gym Management
             </p>
             <div className="h-[2px] w-40 bg-gradient-to-r from-[#d4af37] via-[#e6c76a] to-transparent mt-1.5" />
             <p className="text-sm text-neutral-400 mt-1">
@@ -497,20 +507,12 @@ export default function Page() {
                       <Label htmlFor="duration" className="text-zinc-300">
                         Duration of Registration
                       </Label>
-                      <Select>
-                        <SelectTrigger
-                          id="duration"
-                          className="bg-zinc-950 border-zinc-700"
-                        >
-                          <SelectValue placeholder="Select duration" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="1">1 Month</SelectItem>
-                          <SelectItem value="3">3 Months</SelectItem>
-                          <SelectItem value="6">6 Months</SelectItem>
-                          <SelectItem value="12">12 Months</SelectItem>
-                        </SelectContent>
-                      </Select>
+                      <DurationInput
+                        value={durationValue}
+                        onChange={setDurationValue}
+                        placeholder="Enter or select duration"
+                        className="bg-zinc-950 border-zinc-700 focus:border-[#d4af37]"
+                      />
                     </div>
                   </div>
                 </div>
@@ -578,7 +580,17 @@ export default function Page() {
                       </Label>
                       <Input
                         id="amount"
-                        placeholder="₦0.00"
+                        placeholder="$0.00"
+                        className="bg-zinc-950 border-zinc-700 focus:border-[#d4af37]"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="payment-date" className="text-zinc-300">
+                        Payment Date
+                      </Label>
+                      <Input
+                        id="payment-date"
+                        type="date"
                         className="bg-zinc-950 border-zinc-700 focus:border-[#d4af37]"
                       />
                     </div>
@@ -601,6 +613,16 @@ export default function Page() {
                           ))}
                         </SelectContent>
                       </Select>
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="installment" className="text-zinc-300">
+                        Payment by Installment
+                      </Label>
+                      <Input
+                        id="installment"
+                        placeholder="e.g., Yes - 12 months or No"
+                        className="bg-zinc-950 border-zinc-700 focus:border-[#d4af37]"
+                      />
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="card-type" className="text-zinc-300">
@@ -723,53 +745,11 @@ export default function Page() {
         {paginatedMembers.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {paginatedMembers.map((member) => (
-              <div
+              <MemberCard
                 key={member.id}
+                member={member}
                 onClick={() => handleMemberClick(member)}
-                className="group cursor-pointer bg-zinc-950 border border-zinc-800 rounded-xl p-4 hover:border-[#d4af37]/60 hover:shadow-lg hover:shadow-[#d4af37]/10 transition-all duration-300"
-              >
-                <div className="flex items-start gap-3">
-                  <div className="relative">
-                    <Image
-                      src={member.image}
-                      alt={member.name}
-                      width={50}
-                      height={50}
-                      className="rounded-full object-cover ring-2 ring-zinc-800 group-hover:ring-[#d4af37]/30 transition-all"
-                    />
-                    <div
-                      className={`absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-zinc-950 ${member.status === "Active" ? "bg-green-500" : "bg-red-500"}`}
-                    />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold text-white truncate group-hover:text-[#e6c76a] transition-colors">
-                      {member.name} {member.surname}
-                    </h3>
-                    <p className="text-xs text-zinc-400 truncate">
-                      {member.email}
-                    </p>
-                    <p className="text-xs text-zinc-500 mt-1">{member.phone}</p>
-                  </div>
-                </div>
-
-                <div className="mt-4 pt-4 border-t border-zinc-800 space-y-2">
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="text-zinc-500">Membership</span>
-                    <span
-                      className="text-[#e6c76a] font-medium truncate ml-2 max-w-[140px]"
-                      title={member.membershipType}
-                    >
-                      {member.membershipType.split(" ")[0]}
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="text-zinc-500">Expires</span>
-                    <span className="text-zinc-300">
-                      {new Date(member.expiryDate).toLocaleDateString("en-GB")}
-                    </span>
-                  </div>
-                </div>
-              </div>
+              />
             ))}
           </div>
         ) : (
@@ -865,142 +845,109 @@ export default function Page() {
 
               <div className="space-y-6 mt-6">
                 {/* Personal Information */}
-                <div className="space-y-3">
-                  <div className="flex items-center gap-2 text-sm font-semibold text-[#e6c76a]">
-                    <User className="w-4 h-4" />
-                    <span>Personal Information</span>
-                  </div>
-                  <div className="grid grid-cols-2 gap-4 bg-zinc-950 rounded-lg p-4">
-                    <div>
-                      <p className="text-xs text-zinc-500">Full Name</p>
-                      <p className="text-sm text-white mt-1">
-                        {selectedMember.name} {selectedMember.surname}
-                      </p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-zinc-500">Email</p>
-                      <p className="text-sm text-white mt-1 truncate">
-                        {selectedMember.email}
-                      </p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-zinc-500">Phone</p>
-                      <p className="text-sm text-white mt-1">
-                        {selectedMember.phone}
-                      </p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-zinc-500">Address</p>
-                      <p className="text-sm text-white mt-1 truncate ">
-                        {selectedMember.address}
-                      </p>
-                    </div>
-                  </div>
-                </div>
+                <InfoSection
+                  icon={<User className="w-4 h-4" />}
+                  title="Personal Information"
+                >
+                  <InfoField
+                    label="Full Name"
+                    value={`${selectedMember.name} ${selectedMember.surname}`}
+                  />
+                  <InfoField
+                    label="Email"
+                    value={selectedMember.email}
+                    className="truncate"
+                  />
+                  <InfoField label="Phone" value={selectedMember.phone} />
+                  <InfoField
+                    label="Address"
+                    value={selectedMember.address}
+                    className="truncate"
+                  />
+                </InfoSection>
 
                 {/* Membership Details */}
-                <div className="space-y-3">
-                  <div className="flex items-center gap-2 text-sm font-semibold text-[#e6c76a]">
-                    <CreditCard className="w-4 h-4" />
-                    <span>Membership Details</span>
-                  </div>
-                  <div className="grid grid-cols-2 gap-4 bg-zinc-950 rounded-lg p-4">
-                    <div>
-                      <p className="text-xs text-zinc-500">Membership Type</p>
-                      <p className="text-sm text-white mt-1">
-                        {selectedMember.membershipType}
-                      </p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-zinc-500">Duration</p>
-                      <p className="text-sm text-white mt-1">
-                        {selectedMember.duration}
-                      </p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-zinc-500">Card Type</p>
-                      <p className="text-sm text-white mt-1">
-                        {selectedMember.regCardType}
-                      </p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-zinc-500">Amount Paid</p>
-                      <p className="text-sm text-[#d4af37] font-semibold mt-1">
-                        {selectedMember.amount}
-                      </p>
-                    </div>
-                  </div>
-                </div>
+                <InfoSection
+                  icon={<CreditCard className="w-4 h-4" />}
+                  title="Membership Details"
+                >
+                  <InfoField
+                    label="Membership Type"
+                    value={selectedMember.membershipType}
+                  />
+                  <InfoField label="Duration" value={selectedMember.duration} />
+                  <InfoField
+                    label="Card Type"
+                    value={selectedMember.regCardType}
+                  />
+                  <InfoField
+                    label="Amount Paid"
+                    value={selectedMember.amount}
+                    className="text-[#d4af37] font-semibold"
+                  />
+                </InfoSection>
 
                 {/* Important Dates */}
-                <div className="space-y-3">
-                  <div className="flex items-center gap-2 text-sm font-semibold text-[#e6c76a]">
-                    <Calendar className="w-4 h-4" />
-                    <span>Important Dates</span>
-                  </div>
-                  <div className="grid grid-cols-2 gap-4 bg-zinc-950 rounded-lg p-4">
-                    <div>
-                      <p className="text-xs text-zinc-500">Registration Date</p>
-                      <p className="text-sm text-white mt-1">
-                        {new Date(
-                          selectedMember.registrationDate,
-                        ).toLocaleDateString("en-GB")}
-                      </p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-zinc-500">Card Received</p>
-                      <p className="text-sm text-white mt-1">
-                        {new Date(
-                          selectedMember.cardReceivedDate,
-                        ).toLocaleDateString("en-GB")}
-                      </p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-zinc-500">Card Issue Date</p>
-                      <p className="text-sm text-white mt-1">
-                        {new Date(
-                          selectedMember.cardIssueDate,
-                        ).toLocaleDateString("en-GB")}
-                      </p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-zinc-500">Expiry Date</p>
-                      <p
-                        className={`text-sm font-semibold mt-1 ${
-                          selectedMember.status === "Active"
-                            ? "text-green-400"
-                            : "text-red-400"
-                        }`}
-                      >
-                        {new Date(selectedMember.expiryDate).toLocaleDateString(
-                          "en-GB",
-                        )}
-                      </p>
-                    </div>
-                  </div>
-                </div>
+                <InfoSection
+                  icon={<Calendar className="w-4 h-4" />}
+                  title="Important Dates"
+                >
+                  <InfoField
+                    label="Registration Date"
+                    value={new Date(
+                      selectedMember.registrationDate,
+                    ).toLocaleDateString("en-GB")}
+                  />
+                  <InfoField
+                    label="Card Received"
+                    value={new Date(
+                      selectedMember.cardReceivedDate,
+                    ).toLocaleDateString("en-GB")}
+                  />
+                  <InfoField
+                    label="Card Issue Date"
+                    value={new Date(
+                      selectedMember.cardIssueDate,
+                    ).toLocaleDateString("en-GB")}
+                  />
+                  <InfoField
+                    label="Expiry Date"
+                    value={new Date(
+                      selectedMember.expiryDate,
+                    ).toLocaleDateString("en-GB")}
+                    className={
+                      selectedMember.status === "Active"
+                        ? "text-green-400 font-semibold"
+                        : "text-red-400 font-semibold"
+                    }
+                  />
+                </InfoSection>
 
                 {/* Payment Information */}
-                <div className="space-y-3">
-                  <div className="flex items-center gap-2 text-sm font-semibold text-[#e6c76a]">
-                    <DollarSign className="w-4 h-4" />
-                    <span>Payment Information</span>
-                  </div>
-                  <div className="grid grid-cols-2 gap-4 bg-zinc-950 rounded-lg p-4">
-                    <div>
-                      <p className="text-xs text-zinc-500">Payment Method</p>
-                      <p className="text-sm text-white mt-1">
-                        {selectedMember.paymentMethod}
-                      </p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-zinc-500">Amount</p>
-                      <p className="text-sm text-[#d4af37] font-semibold mt-1">
-                        {selectedMember.amount}
-                      </p>
-                    </div>
-                  </div>
-                </div>
+                <InfoSection
+                  icon={<DollarSign className="w-4 h-4" />}
+                  title="Payment Information"
+                >
+                  <InfoField
+                    label="Payment Method"
+                    value={selectedMember.paymentMethod}
+                  />
+                  <InfoField
+                    label="Payment Date"
+                    value={new Date(
+                      selectedMember.paymentDate,
+                    ).toLocaleDateString("en-GB")}
+                  />
+                  <InfoField
+                    label="Payment by Installment"
+                    value={selectedMember.paymentByInstallment}
+                  />
+                  <InfoField
+                    label="Amount"
+                    value={selectedMember.amount}
+                    className="text-[#d4af37] font-semibold"
+                  />
+                </InfoSection>
               </div>
 
               <DialogFooter className="mt-6">
