@@ -70,11 +70,15 @@ const MemberSchema = new mongoose.Schema(
     regCardType: {
       type: String,
       enum: [
-        "Standard Card",
-        "Gold Card",
-        "Platinum Card",
-        "Digital Card",
-        "Junior Card",
+        "REGULAR CARD",
+        "VIP CARD",
+        "GROUP CARD",
+        "PERSONAL TRAINING CARD",
+        "SEASON PERSONAL CARD",
+        "ONLINE CARD",
+        "ZUMBA CARD",
+        "BOXING CARD",
+        "KIDS CARD",
       ],
     },
     paymentMethod: {

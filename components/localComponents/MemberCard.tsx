@@ -1,17 +1,7 @@
 import Image from "next/image";
 
 interface MemberCardProps {
-  member: {
-    id: number;
-    name: string;
-    surname: string;
-    email: string;
-    phone: string;
-    image: string;
-    membershipType: string;
-    expiryDate: string;
-    status: "Active" | "Expired";
-  };
+  member: Member;
   onClick: () => void;
 }
 
@@ -24,7 +14,7 @@ export function MemberCard({ member, onClick }: MemberCardProps) {
       <div className="flex items-start gap-3">
         <div className="relative">
           <Image
-            src={member.image}
+            src={member.image || ""}
             alt={member.name}
             width={50}
             height={50}

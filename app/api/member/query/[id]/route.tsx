@@ -5,12 +5,13 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } },
+  context: { params: Promise<{ id: string }> }, // Changed
 ) {
   try {
+    const { id } = await context.params;
     await connectMongoDb();
 
-    const member = await Member.findById(params.id);
+    const member = await Member.findById(id);
 
     if (!member) {
       return NextResponse.json(
@@ -45,15 +46,16 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } },
+  context: { params: Promise<{ id: string }> },
 ) {
   try {
+    const { id } = await context.params;
     await connectMongoDb();
 
     const body = await request.json();
 
     // Update member
-    const member = await Member.findByIdAndUpdate(params.id, body, {
+    const member = await Member.findByIdAndUpdate(id, body, {
       new: true, // Return updated document
       runValidators: true, // Run model validators
     });
@@ -117,12 +119,13 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } },
+  context: { params: Promise<{ id: string }> },
 ) {
   try {
+    const { id } = await context.params;
     await connectMongoDb();
 
-    const member = await Member.findByIdAndDelete(params.id);
+    const member = await Member.findByIdAndDelete(id);
 
     if (!member) {
       return NextResponse.json(

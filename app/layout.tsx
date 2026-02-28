@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import Aurora from "@/components/Aurora";
+import { Toaster } from "sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,6 +36,18 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          <Toaster
+            position="top-right"
+            richColors
+            closeButton
+            toastOptions={{
+              style: {
+                background: "#18181b",
+                color: "#fff",
+                border: "1px solid #27272a",
+              },
+            }}
+          />
           <div className="relative flex flex-col">
             <div className="z-10">{children}</div>
             <div className="fixed w-screen right-0 z-0 h-[50vh]">

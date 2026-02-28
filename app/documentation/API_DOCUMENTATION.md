@@ -273,11 +273,8 @@ const handleDeleteMember = async (id: string) => {
 
 Make sure you have this in your `.env.local`:
 
-```
-MONGO_URL=mongodb+srv://username:password@cluster.mongodb.net/gym-management?retryWrites=true&w=majority
-```
+````
 
----
 
 ## Error Handling
 
@@ -289,7 +286,7 @@ All endpoints return a consistent error format:
   "message": "Error description",
   "error": "Detailed error message"
 }
-```
+````
 
 **Common HTTP Status Codes:**
 
