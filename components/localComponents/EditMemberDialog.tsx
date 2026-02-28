@@ -522,7 +522,7 @@ export default function EditMemberDialog({
         {/* Payment Information */}
         <div className="space-y-4">
           <div className="flex items-center gap-2 text-sm font-semibold text-[#e6c76a]">
-            <DollarSign className="w-4 h-4" />
+            <CreditCard className="w-4 h-4" />
             <span>Payment Information</span>
           </div>
           <div className="grid grid-cols-2 gap-4">

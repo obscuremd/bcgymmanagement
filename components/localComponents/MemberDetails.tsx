@@ -229,7 +229,7 @@ export default function MemberDetails({
 
               {/* Payment Information */}
               <InfoSection
-                icon={<DollarSign className="w-4 h-4" />}
+                icon={<CreditCard className="w-4 h-4" />}
                 title="Payment Information"
               >
                 <InfoField
