@@ -25,8 +25,8 @@ export default function AdminUsersPage() {
   const fetchData = async () => {
     try {
       const [usersData, statsData] = await Promise.all([
-        fetch("/api/user").then((res) => res.json()),
-        fetch("/api/user/stats").then((res) => res.json()),
+        fetch("/api/users").then((res) => res.json()),
+        fetch("/api/users/stats").then((res) => res.json()),
       ]);
 
       if (usersData.success) {
