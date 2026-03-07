@@ -15,7 +15,7 @@ import {
   ItemMedia,
   ItemTitle,
 } from "@/components/ui/item";
-import VehicleTable from "@/components/localComponents/FileTable";
+import VehicleTable from "@/components/localComponents/UserTable";
 
 /**
  * change this to come from auth later
